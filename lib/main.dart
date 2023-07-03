@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(360, 690),
       builder: (context, child) {
         return const MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Date Recorder',
           home: HomeScreen(),
         );
