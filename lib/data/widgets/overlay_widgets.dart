@@ -9,7 +9,7 @@ import 'package:isar/isar.dart';
 
 import 'custom_button.dart';
 
-Widget dialog(BuildContext context) {
+Widget dialog(BuildContext context, deleteCallBack) {
   return AlertDialog(
     backgroundColor: AppColor.backGroundColor,
     title: const Text(
@@ -21,7 +21,10 @@ Widget dialog(BuildContext context) {
         side: const BorderSide(color: AppColor.mainColor, width: 2)),
     actions: <Widget>[
       TextButton(
-        onPressed: () => Navigator.pop(context, 'Yes'),
+        onPressed: () {
+          deleteCallBack();
+          Navigator.pop(context, 'Yes');
+        },
         child: const Text(
           'Yes',
           style: TextStyle(color: Colors.red),
@@ -35,7 +38,8 @@ Widget dialog(BuildContext context) {
   );
 }
 
-Widget bottomSheet(BuildContext context, Isar isar) {
+Widget bottomSheet(
+    BuildContext context, Isar isar, setStateCallBack, selectDateCallBack) {
   final HomeController homecontroller = HomeController();
   return Padding(
     padding: EdgeInsets.symmetric(
@@ -49,11 +53,18 @@ Widget bottomSheet(BuildContext context, Isar isar) {
           Button(
               title: "Add Today",
               ontap: () {
-                homecontroller.addDate(isar);
+                // homecontroller.addDate(isar);
+
+                setStateCallBack();
+
+                // homecontroller.fetchDates(isar, setStateCallBack);
               }),
           Button(
               title: "Select Date",
-              ontap: () => pickedDateDialog(context, isar))
+              ontap: () {
+                selectDateCallBack();
+                // pickedDateDialog(context, isar);
+              })
         ],
       ),
     ),

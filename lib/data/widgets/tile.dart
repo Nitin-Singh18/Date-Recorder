@@ -1,13 +1,21 @@
 import 'package:date_recorder/const/app_colors.dart';
 import 'package:date_recorder/data/model/date_model.dart';
 import 'package:date_recorder/data/widgets/overlay_widgets.dart';
+import 'package:date_recorder/modules/home/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:isar/isar.dart';
 
 class Tile extends StatelessWidget {
   final DateModel dateRecord;
-  const Tile({super.key, required this.dateRecord});
+  final Isar isar;
+  final setStateCallBack;
+  const Tile(
+      {super.key,
+      required this.dateRecord,
+      required this.isar,
+      required this.setStateCallBack});
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +38,7 @@ class Tile extends StatelessWidget {
                 ),
                 IconButton(
                     onPressed: () {
-                      showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => dialog(context));
+                      setStateCallBack();
                     },
                     icon: const Icon(
                       Icons.delete_outline_outlined,
