@@ -1,8 +1,11 @@
 import 'package:date_recorder/const/app_colors.dart';
-import 'package:date_recorder/const/widgets/date_picker.dart';
+import 'package:date_recorder/data/widgets/date_picker.dart';
+import 'package:date_recorder/modules/home/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:isar/isar.dart';
 
 import 'custom_button.dart';
 
@@ -32,7 +35,8 @@ Widget dialog(BuildContext context) {
   );
 }
 
-Widget bottomSheet(BuildContext context) {
+Widget bottomSheet(BuildContext context, Isar isar) {
+  final HomeController homecontroller = HomeController();
   return Padding(
     padding: EdgeInsets.symmetric(
       horizontal: 20.w,
@@ -42,8 +46,14 @@ Widget bottomSheet(BuildContext context) {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Button(title: "Add Today", ontap: () => pickedDateDialog(context)),
-          Button(title: "Select Date", ontap: () => pickedDateDialog(context))
+          Button(
+              title: "Add Today",
+              ontap: () {
+                homecontroller.addDate(isar);
+              }),
+          Button(
+              title: "Select Date",
+              ontap: () => pickedDateDialog(context, isar))
         ],
       ),
     ),

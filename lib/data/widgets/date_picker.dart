@@ -1,7 +1,12 @@
 import 'package:date_recorder/const/app_colors.dart';
+import 'package:date_recorder/modules/home/controller/home_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:isar/isar.dart';
 
-Future<void> pickedDateDialog(BuildContext context) async {
+Future<void> pickedDateDialog(BuildContext context, Isar isar) async {
+  final HomeController homecontroller = HomeController();
+
   await showDatePicker(
           builder: (context, child) {
             return Theme(
@@ -18,10 +23,11 @@ Future<void> pickedDateDialog(BuildContext context) async {
           firstDate: DateTime(2019),
           lastDate: DateTime.now())
       .then(
-    (pickedDate) {
-      if (pickedDate == null) {
+    (date) {
+      if (date == null) {
         return;
       }
+      homecontroller.addSelectedDate(isar, DateFormat.yMMMEd().format(date));
     },
   );
 }

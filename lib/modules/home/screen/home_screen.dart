@@ -1,13 +1,38 @@
-import 'package:date_recorder/const/widgets/custom_button.dart';
-import 'package:date_recorder/const/widgets/overlay_widgets.dart';
+import 'package:date_recorder/data/model/date_model.dart';
+import 'package:date_recorder/data/widgets/custom_button.dart';
+import 'package:date_recorder/data/widgets/overlay_widgets.dart';
+import 'package:date_recorder/modules/home/controller/home_controller.dart';
+import 'package:date_recorder/services/local/db.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:isar/isar.dart';
 
 import '../../../const/app_colors.dart';
-import '../../../const/widgets/tile.dart';
+import '../../../data/widgets/tile.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  final Isar isar;
+  const HomeScreen({super.key, required this.isar});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final HomeController _homeController = HomeController();
+  final isarDB = DB();
+  List<DateModel> dateRecords = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getRecords();
+  }
+
+  void getRecords() async {
+    dateRecords = await _homeController.fetchDates(widget.isar);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +45,14 @@ class HomeScreen extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
+              itemCount: dateRecords.length,
               itemBuilder: (context, index) {
+                final dateRecord = dateRecords[index];
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                  child: const Tile(),
+                  child: Tile(
+                    dateRecord: dateRecord,
+                  ),
                 );
               },
             ),
@@ -41,7 +70,7 @@ class HomeScreen extends StatelessWidget {
               backgroundColor: AppColor.backGroundColor,
               context: context,
               builder: (BuildContext context) {
-                return bottomSheet(context);
+                return bottomSheet(context, widget.isar);
               },
             );
           },
