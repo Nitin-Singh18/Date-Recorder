@@ -4,7 +4,7 @@ import 'package:isar/isar.dart';
 class DB {
   Future<int> insertDateRecord(String date, Isar isar) async {
     final dateRecord = DateModel()..date = date;
-    late final id;
+    late final int id;
     await isar.writeTxn(
       () async {
         id = await isar.dateModels.put(dateRecord);

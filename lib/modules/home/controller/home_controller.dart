@@ -7,24 +7,38 @@ import 'package:isar/isar.dart';
 class HomeController {
   final _isarDB = DB();
   List<DateModel> dateRecords = [];
-  Future<void> addDate(Isar isar) async {
+
+  //function to add current date
+  Future<void> addDate(Isar isar, snackbarCallBack) async {
     final String date = DateFormat.yMMMEd().format(DateTime.now());
-    final id = await _isarDB.insertDateRecord(date, isar);
-    dateRecords.add(DateModel()
-      ..id = id
-      ..date = date);
+
+    final bool isDuplicate = dateRecords.any((element) => element.date == date);
+    if (!isDuplicate) {
+      final id = await _isarDB.insertDateRecord(date, isar);
+      final DateModel newDateRecord = DateModel()
+        ..id = id
+        ..date = date;
+      dateRecords.insert(0, newDateRecord);
+    } else {
+      snackbarCallBack();
+    }
   }
 
-  Future<void> addSelectedDate(
-    Isar isar,
-    String date,
-  ) async {
-    final id = await _isarDB.insertDateRecord(date, isar);
-    dateRecords.add(DateModel()
-      ..id = id
-      ..date = date);
+  //function to add selected date
+  Future<void> addSelectedDate(Isar isar, String date, snackbarCallBack) async {
+    final bool isDuplicate = dateRecords.any((element) => element.date == date);
+    if (!isDuplicate) {
+      final id = await _isarDB.insertDateRecord(date, isar);
+      final DateModel newDateRecord = DateModel()
+        ..id = id
+        ..date = date;
+      dateRecords.insert(0, newDateRecord);
+    } else {
+      snackbarCallBack();
+    }
   }
 
+  //function to delete a date
   deleteDate(DateModel dateRecord, Isar isar) {
     _isarDB.deleteRecord(dateRecord.id, isar);
     dateRecords.remove(dateRecord);
@@ -32,6 +46,7 @@ class HomeController {
 
   void fetchDates(Isar isar, VoidCallback setStateCallBack) async {
     dateRecords = await _isarDB.getDateRecord(isar);
+    dateRecords = dateRecords.reversed.toList();
     setStateCallBack();
   }
 }

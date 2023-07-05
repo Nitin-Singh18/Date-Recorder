@@ -31,11 +31,11 @@ class _HomeScreenState extends State<HomeScreen> {
     _homeController.fetchDates(widget.isar, () {
       setState(() {});
     });
-    // setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    // _homeController.dateRecords = _homeController.dateRecords.reversed.toList();
     return Scaffold(
       backgroundColor: AppColor.backGroundColor,
       body: Column(
@@ -47,6 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: ListView.builder(
               itemCount: _homeController.dateRecords.length,
               itemBuilder: (context, index) {
+                // _homeController.dateRecords =
+                //     _homeController.dateRecords.reversed.toList();
                 final dateRecord = _homeController.dateRecords[index];
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0.w),
@@ -84,16 +86,29 @@ class _HomeScreenState extends State<HomeScreen> {
               context: context,
               builder: (BuildContext context) {
                 return bottomSheet(context, widget.isar, () async {
-                  await _homeController.addDate(
-                    widget.isar,
-                  );
+                  await _homeController.addDate(widget.isar, () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Cannot add same date twice"),
+                      ),
+                    );
+                  });
                   setState(() {});
                   Navigator.pop(context);
                 }, () async {
                   final date = await pickedDateDialog(context, widget.isar);
                   if (date != null) {
                     await _homeController.addSelectedDate(
-                        widget.isar, DateFormat.yMMMEd().format(date));
+                      widget.isar,
+                      DateFormat.yMMMEd().format(date),
+                      () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Cannot add same date twice"),
+                          ),
+                        );
+                      },
+                    );
                   }
                   setState(() {});
                   Navigator.pop(context);

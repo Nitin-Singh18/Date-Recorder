@@ -1,6 +1,5 @@
 import 'package:date_recorder/const/app_colors.dart';
-import 'package:date_recorder/data/widgets/date_picker.dart';
-import 'package:date_recorder/modules/home/controller/home_controller.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,7 +31,10 @@ Widget dialog(BuildContext context, deleteCallBack) {
       ),
       TextButton(
         onPressed: () => Navigator.pop(context, 'Cancel'),
-        child: const Text('Cancel'),
+        child: const Text(
+          'Cancel',
+          style: TextStyle(color: AppColor.mainColor),
+        ),
       ),
     ],
   );
@@ -40,7 +42,6 @@ Widget dialog(BuildContext context, deleteCallBack) {
 
 Widget bottomSheet(
     BuildContext context, Isar isar, setStateCallBack, selectDateCallBack) {
-  final HomeController homecontroller = HomeController();
   return Padding(
     padding: EdgeInsets.symmetric(
       horizontal: 20.w,
@@ -53,17 +54,12 @@ Widget bottomSheet(
           Button(
               title: "Add Today",
               ontap: () {
-                // homecontroller.addDate(isar);
-
                 setStateCallBack();
-
-                // homecontroller.fetchDates(isar, setStateCallBack);
               }),
           Button(
               title: "Select Date",
               ontap: () {
                 selectDateCallBack();
-                // pickedDateDialog(context, isar);
               })
         ],
       ),

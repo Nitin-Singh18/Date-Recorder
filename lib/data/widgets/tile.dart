@@ -1,7 +1,6 @@
 import 'package:date_recorder/const/app_colors.dart';
 import 'package:date_recorder/data/model/date_model.dart';
-import 'package:date_recorder/data/widgets/overlay_widgets.dart';
-import 'package:date_recorder/modules/home/controller/home_controller.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
